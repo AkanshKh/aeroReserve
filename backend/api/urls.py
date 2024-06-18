@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import FlightViewSet, PlaceViewSet, TicketViewSet, WeekViewSet, PassengerViewSet, UserViewSet, login_view, register_view, logout_view, query
+from .views import FlightViewSet, PlaceViewSet, TicketViewSet, WeekViewSet, PassengerViewSet, UserViewSet, user_login, user_register, user_logout, query
 
 router = DefaultRouter()
 router.register(r'flights', FlightViewSet)
@@ -12,8 +12,8 @@ router.register(r'users', UserViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    # path('login/', login_view, name='login'),
-    # path('register/', register_view, name='register'),
-    # path('logout/', logout_view, name='logout'),
+    path('login/', user_login, name='login'),
+    path('register/', user_register, name='register'),
+    path('logout/', user_logout, name='logout'),
     # path('query/<str:q>/', query, name='query'),
 ]
