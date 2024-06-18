@@ -38,6 +38,8 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
 
+
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def login_view(request):
