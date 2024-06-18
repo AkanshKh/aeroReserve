@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import NavBar from './navBar';
+import Footer from './footer';
 import './flight.css';
 import {WiNightAltPartlyCloudy, WiDaySunny, WiDaySunnyOvercast, WiNightClear } from 'react-icons/wi';
 
@@ -10,7 +11,7 @@ const Flight = () => {
     const { tripType, origin, destination, departDate, returnDate, seatClass } = location.state || {};
     // console.log(location.state);
     // const [returnDate, setReturnDate] = useState(location.state?.returnDate || '');
-    const flights = [1]
+    // const flights = [1]
     // const origin = location.state?.origin || {};
     // const destination = location.state?.destination || {};
     // const departDate = location.state?.departDate || '';
@@ -40,6 +41,17 @@ const Flight = () => {
         event.preventDefault();
         // Handle form submission logic here
     };
+
+    const handleBook = (flightData) =>{
+        console.log(flightData);
+        navigate("/book", {
+            state:{
+                "flightData": flightData,
+                seatClass,
+                departDate
+            }
+        });
+    }
     
     const handleModify = () => {
         navigate('/');
@@ -285,7 +297,7 @@ const Flight = () => {
             <div className="query-result-div">
                 <div className="container">
                     <div className="row">
-                        {flights.length > 0 ? (
+                        {filteredFlights.length > 0 ? (
                             <>
                             <div className="col-lg-3 filter-div">
                                 <div className="filter">
@@ -401,7 +413,7 @@ const Flight = () => {
                             <div id="flights_div">
                                 {filteredFlights.map((flight, index) => (
                                     <div key={index} className="each-flight-div-box show">
-                                        <div className="each-flight-div" onClick={() => console.log('Flight selected')}>
+                                        <div className="each-flight-div" onClick={() => handleBook(flight)}>
                                             <div className="flight-company">
                                                 <div className="flight-icon">
                                                     <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1.5em" height="1.3em" style={{ transform: 'rotate(360deg)' }} preserveAspectRatio="xMidYMid meet" viewBox="0 0 440 384">
@@ -439,8 +451,14 @@ const Flight = () => {
                                                     <h5 className='price'>{flight.Price}</h5>
                                                 </div>
                                                 <div className="flight-details-btn">
-                                                    <form action="/review" method="GET" style={{ display: 'flex' }}>
-                                                        <button className="btn btn-primary btn-danger o-b" type="submit"><nobr>Book Flight</nobr></button>
+                                                    <form style={{ display: 'flex' }}>
+                                                        <button 
+                                                        className="btn btn-primary btn-danger o-b" 
+                                                        type="button"
+                                                        // onClick={() => handleBook(flight)}
+                                                        >
+                                                            <nobr>Book Flight</nobr>
+                                                        </button>
                                                     </form>
                                                 </div>
                                             </div>
@@ -471,6 +489,7 @@ const Flight = () => {
                 </div>
             </div>
         </section>
+        <Footer />
         </div>
     </>
     );
