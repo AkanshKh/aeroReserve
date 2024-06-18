@@ -8,7 +8,7 @@ import {WiNightAltPartlyCloudy, WiDaySunny, WiDaySunnyOvercast, WiNightClear } f
 const Flight = () => {
     const location = useLocation();
     const { tripType, origin, destination, departDate, returnDate, seatClass } = location.state || {};
-    console.log(location.state);
+    // console.log(location.state);
     // const [returnDate, setReturnDate] = useState(location.state?.returnDate || '');
     const flights = [1]
     // const origin = location.state?.origin || {};
@@ -18,21 +18,33 @@ const Flight = () => {
     const minPrice = location.state?.minPrice || 0;
     const maxPrice = location.state?.maxPrice || 1000;
 
-    const handleFilter = () => {
-        // Implement filter logic here
+    const handleFilter = (type, start, end) => {
+        const filtered = flightsList.filter(flight => {
+            let flightTime = parseInt(flight[type === 'arrival' ? 'arrivalTime' : 'departTime'].split(':')[0]);
+            const flightHour = flight[type === 'arrival' ? 'arrivalTime' : 'departTime'].slice(-2);
+            if (flightHour === 'PM' && flightTime !== 12) {
+                flightTime += 12;
+            }
+            return flightTime >= start && flightTime < end;
+        });
+        setFilteredFlights(filtered);
     };
-
+    
+    const handleReset = () => {
+        setFilteredFlights(flightsList);
+    }
+    
     const navigate = useNavigate();
-
+    
     const handleSubmit = (event) => {
         event.preventDefault();
         // Handle form submission logic here
     };
-
+    
     const handleModify = () => {
         navigate('/');
     }
-
+    
     const flightsList = [
         {
             company : 'Indigo',
@@ -205,6 +217,7 @@ const Flight = () => {
             duration: '2 h 15m',
         }
     ]
+    const [filteredFlights, setFilteredFlights] = useState(flightsList);
 
     return (
     <>
@@ -341,7 +354,7 @@ const Flight = () => {
                                     </div>
                                     <div className="clr-filter-div">
                                         <center>
-                                            <button className="btn-link" onClick={handleFilter}>Reset Filters</button>
+                                            <button className="btn-link" onClick={handleReset}>Reset Filters</button>
                                         </center>
                                     </div>
                                 </div>
@@ -386,7 +399,7 @@ const Flight = () => {
                                 </div>
                             </div>
                             <div id="flights_div">
-                                {flightsList.map((flight, index) => (
+                                {filteredFlights.map((flight, index) => (
                                     <div key={index} className="each-flight-div-box show">
                                         <div className="each-flight-div" onClick={() => console.log('Flight selected')}>
                                             <div className="flight-company">
