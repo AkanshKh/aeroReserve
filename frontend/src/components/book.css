@@ -119,6 +119,9 @@ h5{
 .traveller-name{
   font-weight: 600;
 }
+.btn-add{
+  background-color: #e2caca;
+}
 .delete-traveller button{
   padding: 0;
 }
@@ -128,7 +131,21 @@ h5{
 .delete-traveller button:hover{
   color: red;
 }
+.delete-button {
+  background-color: #e2caca;
+  border: none;
+  color: white;
+  padding: 5px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
+.delete-button:hover {
+  color: black;
+}
 .contact-details-div{
   margin: 13px 10px;
   padding: 10px;

@@ -1,8 +1,24 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
 import './layout.css';
+import { AuthContext } from "../context/authContext";
+import { FaUserCircle } from "react-icons/fa";
+import { CiLogout } from "react-icons/ci";
+
 
 const NavBar = () => {
+    
+    const { user, logout } = useContext(AuthContext);
+
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const handleLogout = () => {
+        logout();
+    }
+
+    const toggleDropdown = () => {
+        setDropdownOpen(!dropdownOpen);
+    }
+
     return (
         <nav className="navbar navbar-expand-lg navbar-light">
                 <Link className="navbar-brand" to="/">
@@ -18,14 +34,27 @@ const NavBar = () => {
                         </li>
                     </ul>
                     <ul className="navbar-nav">
-                        {/* Assuming user authentication is managed via context or props */}
-                        {/* Replace this with appropriate user authentication logic */}
-                        {false ? ( // Replace 'false' with actual authentication check
+                        {user ? ( 
                             <li className="nav-item dropdown my-account">
-                                <a className="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    My Account
-                                </a>
-                            </li>
+                            <button className="nav-link dropdown-toggle acc-btn" onClick={toggleDropdown}>
+                                My Account
+                            </button>
+                            <div className={dropdownOpen ? "dropdown-menu show" : "dropdown-menu"} aria-labelledby="navbarDropdown">
+                                    <div className="dropdown-header">
+                                        <div>
+                                        </div>
+                                        <span className="dropdown-username">
+                                            <FaUserCircle size={20} style={{"marginRight":"10px"}} />
+                                            {user.username}
+                                        </span>
+                                    </div>
+                                <div className="dropdown-divider"></div>
+                                <button className="dropdown-item " onClick={handleLogout}>
+                                    <CiLogout  style={{"marginRight":"10px"}}/>
+                                    Logout
+                                </button>
+                            </div>
+                        </li>
                         ) : (
                             <li className="nav-item">
                                 <button className="btn btn-outline-danger" style={{ borderRadius: '25rem' }} onClick={() => window.location.href = '/login'}>

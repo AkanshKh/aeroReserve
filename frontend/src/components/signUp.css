@@ -38,3 +38,29 @@
 .small{
     font-size: small;
 }
+.offscreen{
+    position: absolute;
+    left: -9999px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-toggle-icon {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 1;
+}
+
+.form-control.inp.pswd {
+    padding-right: 30px; /* Add padding to avoid text overlap with the icon */
+}

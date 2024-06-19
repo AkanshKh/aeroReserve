@@ -1,33 +1,92 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import './signUp.css';
 import '../App.css';
+
+
+
 const SignUp = () => {
+    const usernameRegex = /^[a-zA-Z0-9_\.]{3,16}$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,20}$/;
     const [formData, setFormData] = useState({
-        firstname: '',
-        lastname: '',
+        first_name: '',
+        last_name: '',
         username: '',
         email: '',
         password: '',
         confirmation: ''
     });
     const [message, setMessage] = useState('');
+    const [togglePassword, setTogglePassword] = useState(false);
+
     const navigate = useNavigate();
+
+    const handleTogglePassword = () => {
+        setTogglePassword(!togglePassword);
+    };
+
+    const validateUsername = (name) => {
+        if (!usernameRegex.test(name)) {
+            return 'Username must be 3-16 characters long and can only contain letters, numbers, underscores, and dots.';
+        }
+        return '';
+    };
+
+    const validatePassword = (pass) => {
+        if (!passwordRegex.test(pass)) {
+            return 'Password must be 8-20 characters long, and include at least one uppercase letter, one lowercase letter, one number, and one special character.';
+        }
+        return '';
+    };
+
+    const validateMatch = (pass , conf) => {
+        if(pass != conf){
+            return 'Passwords do not match';
+        }
+    }
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Perform sign-up logic here
-        // If successful, redirect to login page or dashboard:
-        navigate('/login');
+        const url = 'http://localhost:8000/api/register/';
+        console.log(formData);
+        try{
+            const response = await fetch(url,{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+    
+            if(response.status === 200){
+                // console.log("done")
+                navigate('/login');
+            }
+            else if(response.status === 400){
+                // console.log("error")
+                const errorData = await response.json();
+                // console.log(errorData);
+                setMessage(errorData.message);
+            }
+            else{
+                setMessage('An error occurred. Please try again.');
+            }
+        }
+        catch(error){
+            console.log(error);
+            setMessage('No connection to the server. Please try again later.');
+        }
+
     };
 
-    const { firstname, lastname, username, email, password, confirmation } = formData;
-    const isFormValid = firstname && lastname && username && email && password && confirmation && password === confirmation;
+    const { first_name, last_name, username, email, password, confirmation } = formData;
+    const isFormValid = first_name && last_name && username && email && password && confirmation && password === confirmation;
 
     return (
         <div className="user-box" style={{ marginTop: '6vh' }}>
@@ -44,11 +103,11 @@ const SignUp = () => {
                             <input
                                 className="form-control inp fname"
                                 type="text"
-                                name="firstname"
+                                name="first_name"
                                 placeholder="First Name *"
                                 autoComplete="new-password"
                                 autoFocus
-                                value={firstname}
+                                value={first_name}
                                 onChange={handleChange}
                             />
                             <span className="star small"></span>
@@ -57,10 +116,10 @@ const SignUp = () => {
                             <input
                                 className="form-control inp lname"
                                 type="text"
-                                name="lastname"
+                                name="last_name"
                                 placeholder="Last Name *"
                                 autoComplete="new-password"
-                                value={lastname}
+                                value={last_name}
                                 onChange={handleChange}
                             />
                             <span className="star small"></span>
@@ -77,6 +136,7 @@ const SignUp = () => {
                         value={username}
                         onChange={handleChange}
                     />
+                    <p className={validateUsername(username) && username ? "small" : "offscreen"} style={{ color: 'red' }}>{validateUsername(username)}</p>
                     <span className="star small">{message}</span>
                 </div>
                 <div className="form-group">
@@ -92,15 +152,21 @@ const SignUp = () => {
                     <span className="star small"></span>
                 </div>
                 <div className="form-group">
+                <div className="password-wrapper">
                     <input
                         className="form-control inp pswd"
-                        type="password"
+                        type={togglePassword ? "text" : "password"}
                         name="password"
                         placeholder="Password *"
                         autoComplete="new-password"
                         value={password}
                         onChange={handleChange}
                     />
+                    <span className="password-toggle-icon" onClick={handleTogglePassword}>
+                        {togglePassword ? <FaEyeSlash style={{opacity:"50%"}} /> : <FaEye style={{opacity:"50%"}}/>}
+                    </span>
+                </div>
+                    <p className={validatePassword(password) ? "small" : "offscreen"} style={{ color: 'red' }}>{validatePassword(password)}</p>
                     <span className="star small"></span>
                 </div>
                 <div className="form-group">
@@ -113,6 +179,7 @@ const SignUp = () => {
                         value={confirmation}
                         onChange={handleChange}
                     />
+                    <p className={validateMatch(password , confirmation) && confirmation ? "small" : "offscreen"} style={{ color: 'red' }}>{validateMatch(password , confirmation)}</p>
                     <span className="star small"></span>
                 </div>
                 <center>
@@ -120,7 +187,7 @@ const SignUp = () => {
                         className="btn btn-danger"
                         type="submit"
                         value="Sign Up"
-                        style={{ marginTop: '10px', width: '95%' }}
+                        style={{ marginTop: '10px', width: '95%' , cursor : isFormValid ? 'pointer' : 'not-allowed'}}
                         disabled={!isFormValid}
                     />
                 </center>

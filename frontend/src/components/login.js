@@ -1,19 +1,44 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import './login.css';
-import '../App.css'
+import '../App.css';
+import { AuthContext } from '../context/authContext';
 
 const Login = () => {
+
+    const { login } = useContext(AuthContext);
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
     // const history = useHistory();
 
-    const handleSubmit = (e) => {
+    const navigate = useNavigate();
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Perform login logic here
-        // If successful, redirect to another page:
-        // history.push('/dashboard');
+        const url = 'http://localhost:8000/api/login/';
+
+        try{
+            const response = await fetch(url,{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password }),
+            });
+
+            if(response.status === 200){
+                const data = await response.json();
+                login(data);
+                navigate('/');
+            }
+            else if(response.status === 400){
+                setMessage('Invalid credentials');
+            }
+        }
+        catch(error){
+            console.log('Error:', error);
+        }
     };
 
     return (

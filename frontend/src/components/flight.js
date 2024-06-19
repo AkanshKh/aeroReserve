@@ -43,7 +43,7 @@ const Flight = () => {
     };
 
     const handleBook = (flightData) =>{
-        console.log(flightData);
+        // console.log(flightData);
         navigate("/book", {
             state:{
                 "flightData": flightData,
