@@ -5,7 +5,9 @@ import "./home.css";
 import "../App.css";
 import { useNavigate } from "react-router-dom";
 
+
 const Home = () => {
+
   const [tripType, setTripType] = useState('one-way');
   const [origin, setOrigin] = useState('');
   const [destination, setDestination] = useState('');
@@ -275,9 +277,9 @@ const Home = () => {
                       onChange={(e) => setSeatClass(e.target.value)}
                       className="form-control mr-sm-2 selectpicker"
                     >
-                      <option value="economy">Economy</option>
-                      <option value="business">Business</option>
-                      <option value="first">First</option>
+                      <option value="Economy">Economy</option>
+                      <option value="Business">Business</option>
+                      <option value="First">First</option>
                     </select>
                   </div>
                   <div className="input-row">
