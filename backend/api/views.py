@@ -7,8 +7,12 @@ from rest_framework.exceptions import ValidationError
 
 from .models import Flight,Place, Ticket, Week, Passenger
 from django.contrib.auth.models import User
-from .serializers import FlightSerializer, PlaceSerializer, TicketSerializer, WeekSerializer, PassengerSerializer, UserSerializer, UserLoginSerializer, UserRegisterSerializer
+from .serializers import FlightSerializer, PlaceSerializer, TicketSerializer, WeekSerializer, PassengerSerializer, UserSerializer, UserLoginSerializer, UserRegisterSerializer,FlightSearchSerializer
 from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import get_object_or_404
+
+import math
+from datetime import datetime
 
 # viewsets define the view behavior.
 class FlightViewSet(viewsets.ModelViewSet):
@@ -41,6 +45,7 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
 
+# somebody once told me the world is gonna roll me i aint the sharpest tool in the shed she was looking kind of dumb with her finger and her thumb in the shape of an L on her forehead well the years start coming and they dont stop coming fed to the rules and i hit the ground running didnt make sense not to live for fun your brain gets smart but your head gets dumb so much to do so much to see so whats wrong with taking the back streets youll never know if you dont go youll never shine if you dont glow hey now youre an all star get your game on go play hey now youre a rock star get the show on get paid and all that glitters is gold only shooting stars break the mold its a cool place and they say it gets colder youre bundled up now wait till you get older but the meteor 
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def query(request, q):
@@ -53,16 +58,6 @@ def query(request, q):
     serializer = PlaceSerializer(filters, many=True)
     return Response(serializer.data, status=200)
 
-# somebody once told me the world is gonna roll me i aint the sharpest tool in the shed she was looking kind of dumb with her finger and her thumb in the shape of an L on her forehead well the years start coming and they dont stop coming fed to the rules and i hit the ground running didnt make sense not to live for fun your brain gets smart but your head gets dumb so much to do so much to see so whats wrong with taking the back streets youll never know if you dont go youll never shine if you dont glow hey now youre an all star get your game on go play hey now youre a rock star get the show on get paid and all that glitters is gold only shooting stars break the mold its a cool place and they say it gets colder youre bundled up now wait till you get older but the meteor 
-
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.permissions import AllowAny
-from rest_framework.authtoken.models import Token
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
-from .serializers import UserLoginSerializer
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -112,4 +107,73 @@ def user_logout(request):
     token = Token.objects.get(user=request.user)
     token.delete()
     return Response({"success": True, "detail": "Logged out!"}, status=status.HTTP_200_OK)
+
+# search flights
+def build_response(flights, seat, prefix=""):
+    try:
+        if seat == 'economy':
+            max_price = flights.last().economy_fare
+            min_price = flights.first().economy_fare
+        elif seat == 'business':
+            max_price = flights.last().business_fare
+            min_price = flights.first().business_fare
+        elif seat == 'first':
+            max_price = flights.last().first_fare
+            min_price = flights.first().first_fare
+    except AttributeError:
+        max_price = 0
+        min_price = 0
+
+    return {
+        f'{prefix}flights': list(flights.values()),
+        f'{prefix}max_price': math.ceil(max_price / 100) * 100,
+        f'{prefix}min_price': math.floor(min_price / 100) * 100
+    }
+
+def get_flights(flightday, origin, destination, seat):
+    if seat == 'economy':
+        return Flight.objects.filter(depart_day=flightday, origin=origin, destination=destination).exclude(economy_fare=0).order_by('economy_fare')
+    elif seat == 'business':
+        return Flight.objects.filter(depart_day=flightday, origin=origin, destination=destination).exclude(business_fare=0).order_by('business_fare')
+    elif seat == 'first':
+        return Flight.objects.filter(depart_day=flightday, origin=origin, destination=destination).exclude(first_fare=0).order_by('first_fare')
+
+@api_view(['GET'])
+def flight_search(request):
+    serializer = FlightSearchSerializer(data=request.GET)
+    if serializer.is_valid():
+        data = serializer.validated_data
+        o_place = data['Origin']
+        d_place = data['Destination']
+        trip_type = data['TripType']
+        depart_date = data['DepartDate']
+        return_date = data.get('ReturnDate')
+        seat = data['SeatClass']
+
+        flightday = get_object_or_404(Week, number=depart_date.weekday())
+        destination = get_object_or_404(Place, code=d_place.upper())
+        origin = get_object_or_404(Place, code=o_place.upper())
+        
+        flights = get_flights(flightday, origin, destination, seat)
+
+        response = build_response(flights, seat)
+
+        if trip_type == '2' and return_date:
+            flightday2 = get_object_or_404(Week, number=return_date.weekday())
+            origin2 = destination
+            destination2 = origin
+            flights2 = get_flights(flightday2, origin2, destination2, seat)
+            response.update(build_response(flights2, seat, prefix="return_"))
+
+        response.update({
+            'origin': origin.code,
+            'destination': destination.code,
+            'seat': seat.capitalize(),
+            'trip_type': trip_type,
+            'depart_date': depart_date,
+            'return_date': return_date,
+        })
+
+        return Response(response, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

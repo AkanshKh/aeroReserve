@@ -81,3 +81,11 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         user.save()
         Token.objects.create(user=user)
         return user
+        
+class FlightSearchSerializer(serializers.Serializer):
+    Origin = serializers.CharField(max_length=3)
+    Destination = serializers.CharField(max_length=3)
+    TripType = serializers.ChoiceField(choices=[('1', 'One Way'), ('2', 'Round Trip')])
+    DepartDate = serializers.DateField()
+    ReturnDate = serializers.DateField(required=False)
+    SeatClass = serializers.ChoiceField(choices=[('economy', 'Economy'), ('business', 'Business'), ('first', 'First')])
