@@ -28,7 +28,7 @@ class WeekSerializer(serializers.ModelSerializer):
 class PassengerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Passenger
-        fields = '__all__'
+        fields = ['first_name', 'last_name', 'gender']
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -81,11 +81,33 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         user.save()
         Token.objects.create(user=user)
         return user
-        
+
 class FlightSearchSerializer(serializers.Serializer):
     Origin = serializers.CharField(max_length=3)
     Destination = serializers.CharField(max_length=3)
     TripType = serializers.ChoiceField(choices=[('1', 'One Way'), ('2', 'Round Trip')])
-    DepartDate = serializers.DateField()
-    ReturnDate = serializers.DateField(required=False)
+    DepartDate = serializers.DateField(required=True, format="%Y-%m-%d")
+    ReturnDate = serializers.DateField(required=False, format="%Y-%m-%d")
     SeatClass = serializers.ChoiceField(choices=[('economy', 'Economy'), ('business', 'Business'), ('first', 'First')])
+
+class ReviewRequestSerializer(serializers.Serializer):
+    flight1Id = serializers.IntegerField(required=True)
+    flight1Date = serializers.DateField(required=True, format="%Y-%m-%d")
+    flight2Id = serializers.IntegerField(required=False)
+    flight2Date = serializers.DateField(required=False, format="%Y-%m-%d")
+    seatClass = serializers.ChoiceField(choices=['economy', 'business', 'first'], required=True)
+
+
+class BookingSerializer(serializers.Serializer):
+    flight1 = serializers.IntegerField(required=True)
+    flight1Date = serializers.DateField(required=True)
+    flight1Class = serializers.ChoiceField(choices=['Economy', 'Business', 'First'])
+    flight2 = serializers.IntegerField(required=False)
+    flight2Date = serializers.DateField(required=False)
+    flight2Class = serializers.ChoiceField(choices=['Economy', 'Business', 'First'], required=False)
+    countryCode = serializers.CharField(max_length=10)
+    mobile = serializers.CharField(max_length=15)
+    email = serializers.EmailField()
+    passengersCount = serializers.IntegerField(min_value=1)
+    passengers = PassengerSerializer(many=True)
+    coupon = serializers.CharField(max_length=20, required=False)

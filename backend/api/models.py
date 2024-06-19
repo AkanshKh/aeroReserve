@@ -71,7 +71,7 @@ TICKET_STATUS =(
 
 class Ticket(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,related_name="bookings", blank=True, null=True)
-    ref_no = models.CharField(max_length=6, unique=True)
+    ref_no = models.CharField(max_length=32,unique=True)
     passengers = models.ManyToManyField(Passenger, related_name="flight_tickets")
     flight = models.ForeignKey(Flight, on_delete=models.CASCADE, related_name="tickets", blank=True, null=True)
     flight_ddate = models.DateField(blank=True, null=True)

@@ -98,8 +98,8 @@ def addInternationalFlights():
     print("Done.\n")
 
 # call these functions
-createWeekDays()
-addPlaces()
-addDomesticFlights()
-addInternationalFlights()
+# createWeekDays()
+# addPlaces()
+# addDomesticFlights()
+# addInternationalFlights()
 
