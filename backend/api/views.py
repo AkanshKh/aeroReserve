@@ -376,8 +376,9 @@ def book(request):
                 fare = (flight1.first_fare * int(passengerscount)) + (flight2.first_fare * int(passengerscount)) if flight2 else flight1.first_fare * int(passengerscount)
             response_data = {
                 'fare': fare + FEE,
-                'ticket1': ticket1.id,
-                'ticket2': ticket2.id if ticket2 else None
+                'ticket1ref': ticket1.ref_no,
+                'ticket1id':ticket1.id,
+                'ticket2': ticket2.ref_no if ticket2 else None
             }
             return JsonResponse(response_data)
         except Exception as e:
@@ -412,6 +413,7 @@ def payment(request):
             
             response_data = {
                 'ticket1': ticket.id,
+                'ticket1ref':ticket.ref_no,
                 'ticket2': None
             }
 
