@@ -6,6 +6,8 @@ import SignUp from './components/signUp';
 import Flight from './components/flight';
 import Book from './components/book';
 import Payment from './components/payment';
+import Exit from './components/exit';
+import Bookings from './components/bookings';
 import { AuthProvider } from './context/authContext';
 import PrivateRoute from './context/protectedRoute';
 
@@ -39,6 +41,20 @@ const App = () => {
                             element={
                                 <PrivateRoute>
                                     <Book />
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route path="/exit" element={
+                            <PrivateRoute>
+                                <Exit />
+                            </PrivateRoute>
+                        
+                        } />
+                        <Route 
+                            path="/bookings"
+                            element={
+                                <PrivateRoute>
+                                    <Bookings />
                                 </PrivateRoute>
                             }
                         />

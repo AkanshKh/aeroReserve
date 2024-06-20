@@ -1,7 +1,7 @@
 import NavBar from "./navBar";
 import Footer from "./footer";
 import React, { useEffect, useState } from "react";
-import "./home.css";
+import "../css/home.css";
 import "../App.css";
 import { useNavigate } from "react-router-dom";
 

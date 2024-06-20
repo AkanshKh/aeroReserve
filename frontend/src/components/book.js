@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import "./book.css";
+import "../css/book.css";
 import NavBar from './navBar';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { MdDelete } from "react-icons/md";
@@ -30,6 +30,8 @@ const BookFlight = () => {
 
   const { user, loading } = useContext(AuthContext);
 
+  const [paymentLoader, setPaymentLoader] = useState(false);  
+
   useEffect(() => {
     // Fetch flight details using flightId
     const fetchFlightDetails = async () => {
@@ -54,18 +56,19 @@ const BookFlight = () => {
       }
     };
     if (user) {
-      console.log(user)
+      // console.log(user)
       fetchFlightDetails();
     }
-    console.log(flight1);
+    // console.log(flight1);
   }, [flightId, user, loading]);
 
   useEffect(() => {
-    console.log(flight1);
+    // console.log(flight1);
   }, [flight1]);
 
   const [mobile, setMobile] = useState('');
   const [email, setEmail] = useState('');
+  const [selectedCountryCode, setSelectedCountryCode] = useState('');
   const [passengers, setPassengers] = useState([]);
   const [newPassenger, setNewPassenger] = useState({ fname: '', lname: '', gender: '' });
   const [errMsg, setErrMsg] = useState('');
@@ -76,7 +79,7 @@ const BookFlight = () => {
     setToggle(!toggle);
   };
   const handleAddPassenger = () => {
-    if (!newPassenger.fname || !newPassenger.lname || !newPassenger){
+    if (!newPassenger.fname || !newPassenger.lname || !newPassenger.gender){
       setErrMsg('Please fill all the fields');
       return;
     }
@@ -85,7 +88,7 @@ const BookFlight = () => {
   };
 
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     if(!mobile || !email){
       setProceedError('Please fill all the fields');
@@ -95,11 +98,54 @@ const BookFlight = () => {
       setProceedError('Please add atleast one passenger');
       return;
     }
-    navigate('/payment', { state: { flight1, departDate, seat, mobile, email, passengers } });
+    setPaymentLoader(true);
+
+    const url = "http://localhost:8000/api/book/";
+    const data = {
+      "flight1" : flight1.id,
+      "flight1Date" : departDate,
+      "flight1Class" : seat,
+      "countryCode" : selectedCountryCode,
+      "mobile" : mobile,
+      "email" : email,
+      "passengersCount" : passengers.length,
+      "passengers" : passengers
+    }
+    console.log(data);
+
+    try{
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Token ${user.token}`
+        },
+        body: JSON.stringify(data)
+      });
+      if(response.ok){
+        const responseData = await response.json();
+        setPaymentLoader(false);
+        console.log(responseData);
+        navigate('/payment', { state: responseData });
+      }
+      else{
+        setPaymentLoader(false);
+        // navigate('/home');
+      }
+    }
+    catch(error){
+      console.error('Error booking flight', error);
+      navigate('/error');
+    }
+    // navigate('/payment', { state: { flight1, departDate, seat, mobile, email, passengers } });
     // Add form submission logic
   };
+  const handleChange = (event) => {
+    // console.log(event.target.value);  
+    setSelectedCountryCode(event.target.value);
+  };
   const handleFocus = () => { 
-    console.log("focus");
+    // console.log("focus");
     setErrMsg('');
     setProceedError('');
   };
@@ -111,6 +157,11 @@ const BookFlight = () => {
   return (
     <>
       <NavBar />
+      {paymentLoader && (
+            <div style={{position:"fixed", top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
+            <p>Loading...</p>
+            </div>
+        )}
       <div className="container-mine">
         <section className="section section1">
           <form >
@@ -171,7 +222,7 @@ const BookFlight = () => {
                     <div className="row form-group">
                       <div className="col-3 ci">
                         Country Code
-                        <select name="countryCode" className="custom-select">
+                        <select name="countryCode" className="custom-select" onChange={handleChange}>
                           {countryCodes.map((country) => (
                             <option key={country.code} value={country.value}>
                               {country.name}
@@ -317,7 +368,7 @@ const BookFlight = () => {
                   <hr />
                   <div className="row base-fare">
                     <div className="base-fare-label">Base Fare:</div>
-                    <div className="base-fare-value"><span>{flight1.Price}</span></div>
+                    <div className="base-fare-value"><span>{flight1.base_fare}</span></div>
                   </div>
                   <div className="row surcharges">
                     <div className="surcharges-label">Fee & Surcharges:</div>
@@ -327,7 +378,7 @@ const BookFlight = () => {
                   <hr />
                   <div className="total-fare">
                     <div className="total-fare-label">Total Fare:</div>
-                    <div className="total-fare-value">
+                    <div className="total-fare-value">{fare}
                     </div>
                   </div>
                 </div>
