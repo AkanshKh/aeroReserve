@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
-import './layout.css';
+import '../css/layout.css';
 import { AuthContext } from "../context/authContext";
 import { FaUserCircle } from "react-icons/fa";
 import { CiLogout } from "react-icons/ci";

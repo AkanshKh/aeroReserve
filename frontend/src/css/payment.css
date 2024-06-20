@@ -1,0 +1,249 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}
+
+.section1{
+    display: block;
+}
+
+.gif-div{
+    display: flex;
+    margin-top: 10px;
+}
+.gif-div img{
+    margin: auto;
+    width: 300px;
+}
+
+.header-before{
+    font-size: 1.6em;
+    text-align: center;
+    color: orange;
+}
+
+.below-header{
+    text-align: center;
+    color: rgb(70, 70, 70);
+    margin-top: 10px;
+    font-size: .95em;
+}
+
+
+@keyframes enlarge{
+    0%{
+        transform: scale(0);
+    }
+    100%{
+        transform: scale(1);
+    }
+}
+
+.section2{
+    display: none;
+}
+.svg-div-c{
+    display: flex;
+    margin-top: 110px;
+}
+
+.section2 .svg-div-c svg{
+    animation-name: enlarge;
+    animation-duration: .5s;
+    animation-fill-mode: forwards;
+    color: rgb(32, 227, 100);
+    margin: auto;
+}
+.header-after{
+    color: green;
+    font-size: 1.5em;
+    font-weight: 500;
+    text-align: center;
+    margin-top: 20px;
+}
+.details-div{
+    text-align: center;
+    margin-top: 20px;
+}
+.ticket-div{
+    display: flex;
+    margin-top: 20px;
+    justify-content: center;
+}
+.ticket-div button{
+    margin-bottom: 10px;
+}
+.flight2{
+    display: none;
+}
+
+
+/* .section3{
+    display: none;
+} */
+.svg-div-e{
+    display: flex;
+    margin-top: 110px;
+}
+.btt{
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    width: fit-content;
+}
+.section3 .svg-div-e svg{
+    animation-name: enlarge;
+    animation-duration: .5s;
+    animation-fill-mode: forwards;
+    color: rgb(215, 0, 0);
+    margin: auto;
+}
+.star{
+    color: rgb(200, 0, 0);
+}
+
+
+
+@media (max-width: 376px){
+    .svg-div-c{
+        margin-top: 50px;
+    }
+    .gif-div{
+        margin-top: 0;
+    }
+    .header-before, .header-after{
+        font-size: 1.3em;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+    .header-after{
+        margin-top: 60px;
+    }
+    .below-header{
+        font-size: .9em;
+    }
+    .details-div{
+        font-size: .9em;
+    }
+    .ticket-div button{
+        font-size: .9rem;
+    }
+}
+
+.section1{
+    display: flex;
+    align-content: center;
+    background-color: rgb(250, 250, 250);
+}
+.btt{
+
+}
+.payment-box{
+    /* margin-top: 100px; */
+    border: 1px solid rgb(221, 221, 221);
+    border-radius: 5px;
+    font-weight: bold;
+    width: 40%;
+    margin: auto;
+    overflow: hidden;
+    background-color: #fff;
+}
+.payment-box-head-div{
+    background-color: rgb(245, 245, 245);
+    padding: 5px 12px;
+    border-bottom: 1px solid rgb(221, 221, 221);
+}
+.payment-box-head{
+    display: flex;
+    justify-content: space-between;
+}
+.payment-box-head h5{
+    margin-top: auto;
+    margin-bottom: auto;
+    font-weight: bold;
+}
+.row{
+    margin-left: 0;
+    margin-right: 0;
+}
+.card-img{
+    width: 90%;
+    height: auto;
+    float: right;
+}
+.display-td{
+    display: table-cell;
+    vertical-align: middle;
+    width: 50%;
+}
+
+.payment-details-input-box{
+    padding: 15px;
+}
+input{
+    box-shadow: inset 0 0 3px rgba(0,0,0,.1);
+}
+.form-group{
+    width: 100%;
+}
+label{
+    margin-bottom: .3rem;
+    font-size: .9em;
+}
+.left-col{
+    width: 70%;
+}
+.right-col{
+    width: 30%;
+    padding-right: 1.5em;
+}
+.expiry-input-div{
+    display: flex;
+}
+.month-div{
+    margin-right: 1em;
+}
+
+.expiry-cvv > .row{
+    width: 100%;
+}
+
+.payment-btn{
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0; 
+}
+
+
+
+
+
+@media (max-width: 376px){
+    .section1 > .container{
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+    .payment-box{
+        margin: auto 0;
+        width: 100%;
+    }
+    .payment-box-head-div{
+        padding: 5px 10px;
+    }
+    .payment-details-input-box{
+        padding: 15px 10px;
+    }
+    .right-col{
+        padding-right: 0;
+    }
+}

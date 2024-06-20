@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import NavBar from "./navBar";
 import Footer from "./footer";
-import "./flight.css";
+import "../css/flight.css";
 import {
   WiNightAltPartlyCloudy,
   WiDaySunny,
