@@ -364,8 +364,8 @@ def book(request):
         passengers = []
         for passenger_data in passengers_data:
             passenger = Passenger.objects.create(
-                first_name=passenger_data.get('first_name'),
-                last_name=passenger_data.get('last_name'),
+                first_name=passenger_data.get('fname'),
+                last_name=passenger_data.get('lname'),
                 gender=passenger_data.get('gender').lower()
             )
             passengers.append(passenger)
