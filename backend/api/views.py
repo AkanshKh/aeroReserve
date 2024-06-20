@@ -13,6 +13,7 @@ from django.shortcuts import get_object_or_404
 from django.http import JsonResponse, HttpResponse
 from django.utils import timezone
 from django.template.loader import get_template
+from django.views.decorators.csrf import csrf_exempt
 
 from io import BytesIO
 from xhtml2pdf import pisa
@@ -55,6 +56,7 @@ class UserViewSet(viewsets.ModelViewSet):
 # somebody once told me the world is gonna roll me i aint the sharpest tool in the shed she was looking kind of dumb with her finger and her thumb in the shape of an L on her forehead well the years start coming and they dont stop coming fed to the rules and i hit the ground running didnt make sense not to live for fun your brain gets smart but your head gets dumb so much to do so much to see so whats wrong with taking the back streets youll never know if you dont go youll never shine if you dont glow hey now youre an all star get your game on go play hey now youre a rock star get the show on get paid and all that glitters is gold only shooting stars break the mold its a cool place and they say it gets colder youre bundled up now wait till you get older but the meteor 
 @api_view(['GET'])
 @permission_classes([AllowAny])
+@csrf_exempt
 def query(request, q):
     places = Place.objects.all()
     filters = []
@@ -68,6 +70,7 @@ def query(request, q):
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
+@csrf_exempt
 def user_login(request):
     serializer = UserLoginSerializer(data=request.data)
     if serializer.is_valid():
@@ -96,6 +99,7 @@ def user_login(request):
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
+@csrf_exempt
 def user_register(request):
     serializer = UserRegisterSerializer(data=request.data)
     if serializer.is_valid():
@@ -110,6 +114,7 @@ def user_register(request):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
+@csrf_exempt
 def user_logout(request):
     token = Token.objects.get(user=request.user)
     token.delete()
@@ -117,6 +122,7 @@ def user_logout(request):
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
+@csrf_exempt
 def flight_search(request):
     serializer = FlightSearchSerializer(data=request.GET)
     
@@ -221,6 +227,7 @@ FEE = 100
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
+@csrf_exempt
 def review(request):
     serializer = ReviewRequestSerializer(data=request.GET)
     
@@ -330,6 +337,7 @@ def createticket(user, passengers, passengerscount, flight, flight_date, flight_
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
+@csrf_exempt
 def book(request):
     if request.method == 'POST':
         data = request.data
@@ -389,6 +397,7 @@ def book(request):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
+@csrf_exempt
 def payment(request):
     if request.method == 'POST':
         data = request.data
@@ -433,6 +442,7 @@ def payment(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
+@csrf_exempt
 def ticket_data(request, ref):
     try:
         ticket = Ticket.objects.get(ref_no=ref)
@@ -459,6 +469,7 @@ def render_to_pdf(template_src, context_dict={}):
     return None
 
 @api_view(['GET'])
+@csrf_exempt
 def get_ticket(request,ref):
     try:
         ticket1 = get_object_or_404(Ticket, ref_no=ref)
@@ -477,6 +488,7 @@ def get_ticket(request,ref):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
+@csrf_exempt
 def bookings(request):
     tickets = Ticket.objects.filter(user=request.user).order_by('-booking_date')
     serializer = TicketSerializer(tickets, many=True)
@@ -490,6 +502,7 @@ from .models import Ticket
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
+@csrf_exempt
 def cancel_ticket(request):
     ref = request.data.get('ref')
     if not ref:
@@ -516,6 +529,7 @@ from .models import Ticket
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
+@csrf_exempt
 def resume_booking(request):
     ref = request.data.get('ref')
     if not ref:
