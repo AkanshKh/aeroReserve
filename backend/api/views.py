@@ -390,7 +390,12 @@ def book(request):
                 'fare': fare + FEE,
                 'ticket1ref': ticket1.ref_no,
                 'ticket1id':ticket1.id,
-                'ticket2': ticket2.ref_no if ticket2 else None
+                'ticket1origincode':ticket1.flight.origin.code,
+                'ticket1destinationcode':ticket1.flight.destination.code,
+                'ticket2': ticket2.ref_no if ticket2 else None,
+                'ticket2id': ticket2.id if ticket2 else None,
+                'ticket2origincode': ticket2.flight.origin.code if ticket2 else None,
+                'ticket2destinationcode': ticket2.flight.destination.code if ticket2 else None
             }
             return JsonResponse(response_data)
         except Exception as e:
