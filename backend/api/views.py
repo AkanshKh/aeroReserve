@@ -418,7 +418,7 @@ def payment(request):
     if request.method == 'POST':
         data = request.data
         
-        ticket_id = data.get('ticket')
+        ticket_refno = data.get('ticket')
         t2 = False
         ticket2_id = data.get('ticket2')
         if ticket2_id:
@@ -431,7 +431,9 @@ def payment(request):
         cvv = data.get('cvv')
 
         try:
-            ticket = Ticket.objects.get(id=ticket_id)
+            ticket = Ticket.objects.get(ref_no=ticket_refno)
+            if(ticket.status == 'CONFIRMED'):
+                return Response({'error': 'Ticket already confirmed.'}, status=status.HTTP_400_BAD_REQUEST)
             ticket.status = 'CONFIRMED'
             ticket.booking_date = timezone.now()
             ticket.save()
@@ -493,7 +495,7 @@ def get_ticket(request,ref):
             'ticket1': ticket1,
             'current_year': datetime.now().year
         }
-        pdf = render_to_pdf('api/ticket.html', data)
+        pdf = render_to_pdf('ticket.html', data)
         if pdf:
             response = HttpResponse(pdf, content_type='application/pdf')
             response['Content-Disposition'] = f'inline; filename="ticket_{ref}.pdf"'
@@ -506,7 +508,7 @@ def get_ticket(request,ref):
 @permission_classes([IsAuthenticated])
 @csrf_exempt
 def bookings(request):
-    tickets = Ticket.objects.filter(user=request.user).order_by('-booking_date')
+    tickets = Ticket.objects.filter(user=request.user,status="CONFIRMED").order_by('-booking_date')
     serializer = TicketSerializer(tickets, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
