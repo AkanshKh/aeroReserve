@@ -82,7 +82,7 @@ class Ticket(models.Model):
     coupon_discount = models.FloatField(default=0.0)
     total_fare = models.FloatField(blank=True, null=True)
     seat_class = models.CharField(max_length=20, choices=SEAT_CLASS)
-    booking_date = models.DateField(default=date.today)
+    booking_date = models.DateTimeField(default=datetime.now)
     mobile = models.CharField(max_length=20,blank=True)
     email = models.EmailField(max_length=45, blank=True)
     status = models.CharField(max_length=45, choices=TICKET_STATUS)

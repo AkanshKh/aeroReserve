@@ -387,6 +387,8 @@ def book(request):
             elif flight_1class == 'First':
                 fare = (flight1.first_fare * int(passengerscount)) + (flight2.first_fare * int(passengerscount)) if flight2 else flight1.first_fare * int(passengerscount)
             flightdata = FlightSerializer(flight1).data
+            origincity = PlaceSerializer(Place.objects.get(code=flight1.origin.code)).data
+            destinationcity = PlaceSerializer(Place.objects.get(code=flight1.destination.code)).data
             response_data = {
                 'fare': fare + FEE,
                 'ticket1ref': ticket1.ref_no,
@@ -394,8 +396,8 @@ def book(request):
                     # flight details
                     "flight":flightdata,
                     "passengercount":passengerscount,
-                    'origin':ticket1.flight.origin.code,
-                    'destination':ticket1.flight.destination.code,
+                    'origin':origincity,
+                    'destination':destinationcity,
                     #booking date
                     'booking_date':ticket1.booking_date,
                     #flight date
