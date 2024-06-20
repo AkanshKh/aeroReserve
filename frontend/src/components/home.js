@@ -62,58 +62,62 @@ const Home = () => {
   ]
 
   const handleTripTypeChange = (e) => {
-    setTripType(e.target.value == 1 ? "one-way" : "round-trip");
+    setTripType(e.target.value === 1 ? "one-way" : "round-trip");
   };
 
   const handleOriginChange = async (e) => {
     const value = e.target.value;
     setOrigin(value);
+    if(value.length >= 2){
+      const url = `http://localhost:8000/api/query/${value}/`;
 
-    if (value.length >= 2) {
-      const filteredAirports = airports.filter(airport => airport.name.toLowerCase().includes(value.toLowerCase()) || airport.code.toLowerCase().includes(value.toLowerCase()));
-      setOriginSuggestions(filteredAirports);
+      try{
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json"
+          }
+        });
+        const data = await response.json();
+        // console.log(data);
+        setOriginSuggestions(data);
+      }
+      catch(error){
+        console.log(error);
+      }
     }
-    else {
+    else{
       setOriginSuggestions([]);
     }
-
-    // if (value.length > 2) {
-    //   const url = `https://api.api-ninjas.com/v1/airports?name=${value}`;
-    //   const url2 = `https://api.flightstats.com/flex/airports/rest/v1/json/active`
-    //   const response = await fetch(url, {
-    //     method: "GET",
-    //     withCredentials: true, 
-    //     headers :{
-    //       'X-Api-Key' : "DPBitNQ5/0bU8z641Sy0QA==f01YKrKULMhVPeD3",
-    //       "Content-Type": "application/json"
-    //     }
-    //   });
-    //   const data = await response.json();
-    //   console.log(data);
-    //   setOriginSuggestions(data);
-    // } 
-    // else {
-    //   setOriginSuggestions([]);
-    // }
   };
 
   const handleDestinationChange = async (e) => {
     const value = e.target.value;
     setDestination(value);
 
-    if (value.length >= 2) {
-      const filteredAirports = airports.filter(airport => airport.name.toLowerCase().includes(value.toLowerCase()));
-      // console.log(filteredAirports);
-      setDestinationSuggestions(filteredAirports);
-    }
-    else {
-      setDestinationSuggestions([]);
+    if(value.length >= 2){
+      const url = `http://localhost:8000/api/query/${value}/`;
+
+      try{
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json"
+          }
+        });
+        const data = await response.json();
+        // console.log(data);
+        setDestinationSuggestions(data);
+      }
+      catch(error){
+        console.log(error);
+      }
     }
   }
 
-  const handleOriginSelect = (city, code) => {
-    // console.log(city, code);
-    setOrigin({city, code});
+  const handleOriginSelect = (suggestion) => {
+    // console.log(suggestion);
+    setOrigin(suggestion);
     // console.log(origin);
     setOriginSuggestions([]);
   };
@@ -121,8 +125,8 @@ const Home = () => {
   // useEffect(() => {
   // }, [origin]);
 
-  const handleDestinationSelect = (city, code) => {
-    setDestination({city, code});
+  const handleDestinationSelect = (suggestion) => {
+    setDestination(suggestion);
     setDestinationSuggestions([]);
   };
 
@@ -130,10 +134,12 @@ const Home = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(origin, destination, departDate, returnDate, seatClass, tripType);
-
+    const tripTypee = (tripType === 'one-way' ? 1 : 2);
+    // console.log(origin)
+    // console.log(destination)
     navigate("/flight",{
       state:{
-        tripType,
+        tripTypee,
         origin,
         destination,
         departDate,
@@ -141,7 +147,6 @@ const Home = () => {
         seatClass
       }
     });
-
   }
 
   
@@ -217,8 +222,8 @@ const Home = () => {
                     {originSuggestions.length > 0 && (
                       <ul className="suggestions">
                         {originSuggestions.map((suggestion, index) => (
-                          <li key={index} onClick={() => handleOriginSelect(suggestion.name, suggestion.code)}>
-                            {suggestion.name} ({suggestion.code})
+                          <li key={index} onClick={() => handleOriginSelect(suggestion)}>
+                            {suggestion.city} ({suggestion.code})
                           </li>
                         ))}
                       </ul>
@@ -239,8 +244,8 @@ const Home = () => {
                     {destinationSuggestions.length > 0 && (
                       <ul className="suggestions">
                         {destinationSuggestions.map((suggestion, index) => (
-                          <li key={index} onClick={() => handleDestinationSelect(suggestion.name, suggestion.code)}>
-                            {suggestion.name} ({suggestion.code})
+                          <li key={index} onClick={() => handleDestinationSelect(suggestion)}>
+                            {suggestion.city} ({suggestion.code})
                           </li>
                         ))}
                       </ul>
