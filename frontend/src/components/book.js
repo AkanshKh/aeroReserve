@@ -143,7 +143,7 @@ const BookFlight = () => {
                       <div className="airport">{origin.airport}</div>
                     </div>
                     <div className="col-3 time-details">
-                      <div className="duration">{flight1.duration}</div>
+                      <div className="duration">{flight1.duration_hr}h {flight1.duration_min}m</div>
                     </div>
                     <div className="col-3 arrival-time">
                       <div className="time">{flight1.arrival_time}</div>
