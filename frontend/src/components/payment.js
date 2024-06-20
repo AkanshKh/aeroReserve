@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../css/payment.css'; 
-import NavBar from './navBar';
+import NavBar from './navbar';
 import { AuthContext } from '../context/authContext';
 import { useContext } from 'react';
 
@@ -10,9 +10,8 @@ const PaymentForm = () => {
     const { user, loading } = useContext(AuthContext);
     const location = useLocation();
     
-    const ticket = location.state.ticket1id;
+    const details = location.state.details;
     const ticket1ref = location.state.ticket1ref;
-    const ticket2 = location.state.ticket2id;
     const fare = location.state.fare;
 
     const [cardNumber, setCardNumber] = useState('');
@@ -42,14 +41,13 @@ const PaymentForm = () => {
 
     const url = "http://localhost:8000/api/payment/";
     const data = {
-      ticket,
-      ticket2,
+      ticket1ref,
       fare,
       cardNumber,
       cardHolderName,
       expMonth,
       expYear,
-      cvv,
+      cvv, 
     };
     console.log(data);
     
@@ -58,7 +56,7 @@ const PaymentForm = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-        //   "Authorization": `Token ${user.token}`
+          "Authorization": `Token ${user.token}`
         },
         body: JSON.stringify(data)
       });
@@ -66,6 +64,7 @@ const PaymentForm = () => {
       if (response.ok) {
         const responseData = await response.json();
         setPaymentLoader(false);
+        console.log('Payment successful:', responseData);
         navigate('/exit', { state: responseData });
       } else {
         setPaymentLoader(false);
@@ -129,8 +128,7 @@ const PaymentForm = () => {
           </div>
           <div className="payment-details-input-box">
             <form onSubmit={handleFormSubmit}>
-              <input type="hidden" name="ticket" value={ticket} required />
-              {ticket2 && <input type="hidden" name="ticket2" value={ticket2} required />}
+              {/* <input type="hidden" name="ticket" value={ticket} required /> */}
               
               <div className="row payment-amount-div">
                 <div className="form-group">

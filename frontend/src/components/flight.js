@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import NavBar from "./navBar";
+import NavBar from "./navbar";
 import Footer from "./footer";
 import "../css/flight.css";
 import {
@@ -29,6 +29,7 @@ const Flight = () => {
   // const destination = location.state?.destination || {};
   // const departDate = location.state?.departDate || '';
   // const returnDate = location.state?.returnDate || '';
+  const seatClassFormatted = seatClass.charAt(0).toLowerCase() + seatClass.slice(1);
   const minPrice = location.state?.minPrice || 0;
   const maxPrice = location.state?.maxPrice || 1000;
   // const [loading, setLoading] = useState(true);
@@ -634,7 +635,12 @@ const Flight = () => {
                               </div>
                               <div className="flight-details">
                                 <div className="flight-price">
-                                  <h5 className="price">{flight.Price}</h5>
+                                  <h5 className="price">
+                                  ₹
+                                  <span>
+                                    {flight[`${seatClassFormatted}_fare`]}
+                                  </span>
+                                  </h5>
                                 </div>
                                 <div className="flight-details-btn">
                                   <form style={{ display: "flex" }}>

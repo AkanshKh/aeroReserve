@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import "../css/book.css";
-import NavBar from './navBar';
+import NavBar from './navbar';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { MdDelete } from "react-icons/md";
 import { BsLuggage } from "react-icons/bs";

@@ -165,27 +165,11 @@ body{
 .search-flight button[type="submit"]{
     margin-top: 10px;
 }
-.acc-btn{
-    background-color: #fff;
-    color: #000;
-    border: 0px solid #000;
-    border-radius: 5px;
-    padding: 5px 10px;
-    font-size: 1em;
-    font-weight: 500;
-    transition-duration: .2s;
-}
-.acc-btn:focus{
-    outline: none;
-}
-
 .search-flight .dropdown-menu{
     top: auto;
     left: auto;
 }
-.dropdown-toggle{
-    cursor: pointer;
-}
+
 
 .second-section .section_title{
     margin-top: 25px;
@@ -342,12 +326,71 @@ footer .container > div{
 .search-flight-form-data{
     position: relative;
 }
+/* Add these styles to your layout.css or Footer.css */
 
+.navbar-nav .my-account .dropdown-menu {
+    right: 0; /* Ensures dropdown aligns to the right */
+    left: auto; /* Prevents dropdown from expanding to the left */
+  }
+  
+  .dropdown-menu.show {
+    display: block;
+  }
+  
+  .dropdown-username {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    font-size: 16px;
+  }
+  
+  .dropdown-divider {
+    height: 1px;
+    margin: 0.5rem 0;
+    overflow: hidden;
+    background-color: #e9ecef;
+  }
+  
+  .acc-btn {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+  }
+  
+  .btnm {
+    border-radius: 15rem;
+  }
+  
 
+.btnm{
+    background-color: #e12323;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition-duration: .2s;
+}
 
-
-
-
+.btnm:hover{
+    background-color: #916868;
+    color: white;
+}
+.acc-btn{
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition-duration: .2s;
+    border: none;
+    background: none;
+}
+.acc-btn:focus{
+    outline:none;
+    color: white;
+}
 ::-webkit-scrollbar-track {
     background: none;
 }

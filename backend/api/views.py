@@ -418,11 +418,11 @@ def payment(request):
     if request.method == 'POST':
         data = request.data
         
-        ticket_refno = data.get('ticket')
+        ticket_refno = data.get('ticket1ref')
         t2 = False
-        ticket2_id = data.get('ticket2')
-        if ticket2_id:
-            t2 = True
+        # ticket2_id = data.get('ticket2')
+        # if ticket2_id:
+        #     t2 = True
         fare = data.get('fare')
         card_number = data.get('cardNumber')
         card_holder_name = data.get('cardHolderName')
@@ -444,11 +444,11 @@ def payment(request):
                 'ticket2': None
             }
 
-            if t2:
-                ticket2 = Ticket.objects.get(id=ticket2_id)
-                ticket2.status = 'CONFIRMED'
-                ticket2.save()
-                response_data['ticket2'] = ticket2.id
+            # if t2:
+            #     ticket2 = Ticket.objects.get(id=ticket2_id)
+            #     ticket2.status = 'CONFIRMED'
+            #     ticket2.save()
+            #     response_data['ticket2'] = ticket2.id
 
             return Response(response_data, status=status.HTTP_200_OK)
         except Ticket.DoesNotExist:
