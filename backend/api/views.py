@@ -386,16 +386,21 @@ def book(request):
                 fare = (flight1.business_fare * int(passengerscount)) + (flight2.business_fare * int(passengerscount)) if flight2 else flight1.business_fare * int(passengerscount)
             elif flight_1class == 'First':
                 fare = (flight1.first_fare * int(passengerscount)) + (flight2.first_fare * int(passengerscount)) if flight2 else flight1.first_fare * int(passengerscount)
+            flightdata = FlightSerializer(flight1).data
             response_data = {
                 'fare': fare + FEE,
                 'ticket1ref': ticket1.ref_no,
-                'ticket1id':ticket1.id,
-                'ticket1origincode':ticket1.flight.origin.code,
-                'ticket1destinationcode':ticket1.flight.destination.code,
-                'ticket2': ticket2.ref_no if ticket2 else None,
-                'ticket2id': ticket2.id if ticket2 else None,
-                'ticket2origincode': ticket2.flight.origin.code if ticket2 else None,
-                'ticket2destinationcode': ticket2.flight.destination.code if ticket2 else None
+                'details':{
+                    # flight details
+                    "flight":flightdata,
+                    "passengercount":passengerscount,
+                    'origin':ticket1.flight.origin.code,
+                    'destination':ticket1.flight.destination.code,
+                    #booking date
+                    'booking_date':ticket1.booking_date,
+                    #flight date
+                    'flight_date':ticket1.flight_ddate,
+                },
             }
             return JsonResponse(response_data)
         except Exception as e:
