@@ -14,14 +14,14 @@ const Flight = () => {
   const location = useLocation();
   const { tripTypee, origin, destination, departDate, returnDate, seatClass } =
     location.state || {};
-  console.log(
-    tripTypee,
-    origin,
-    destination,
-    departDate,
-    returnDate,
-    seatClass
-  );
+  // console.log(
+  //   tripTypee,
+  //   origin,
+  //   destination,
+  //   departDate,
+  //   returnDate,
+  //   seatClass
+  // );
   // console.log(location.state);
   // const [returnDate, setReturnDate] = useState(location.state?.returnDate || '');
   // const flights = [1]
@@ -31,9 +31,10 @@ const Flight = () => {
   // const returnDate = location.state?.returnDate || '';
   const minPrice = location.state?.minPrice || 0;
   const maxPrice = location.state?.maxPrice || 1000;
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
+  const [allFlights, setAllFlights] = useState([]);
   const handleFilter = (type, start, end) => {
-    const filtered = flightsList.filter((flight) => {
+    const filtered = allFlights.filter((flight) => {
       let flightTime = parseInt(
         flight[type === "arrival" ? "arrivalTime" : "departTime"].split(":")[0]
       );
@@ -48,7 +49,7 @@ const Flight = () => {
   };
 
   const handleReset = () => {
-    setFilteredFlights(flightsList);
+    setFilteredFlights(allFlights);
   };
 
   const navigate = useNavigate();
@@ -60,11 +61,14 @@ const Flight = () => {
 
   const handleBook = (flightData) => {
     // console.log(flightData);
+    console.log("clicked");
     navigate("/book", {
       state: {
-        flightData: flightData,
+        flightId : flightData.id,
         seatClass,
         departDate,
+        origin,
+        destination
       },
     });
   };
@@ -73,183 +77,182 @@ const Flight = () => {
     navigate("/");
   };
 
-  const flightsList = [
-    {
-      company: "Indigo",
-      code: "6E",
-      departTime: "10:00 AM",
-      arrivalTime: "12:00 PM",
-      Price: "₹ 5000",
-      from: "Delhi",
-      to: "Mumbai",
-      duration: "2 h 10m",
-    },
-    {
-      company: "Air India",
-      code: "AI",
-      departTime: "08:30 AM",
-      arrivalTime: "10:45 AM",
-      Price: "₹ 4500",
-      from: "Delhi",
-      to: "Kolkata",
-      duration: "2 h 15m",
-    },
-    {
-      company: "SpiceJet",
-      code: "SG",
-      departTime: "02:15 PM",
-      arrivalTime: "04:30 PM",
-      Price: "₹ 3500",
-      from: "Mumbai",
-      to: "Chennai",
-      duration: "2 h 15m",
-    },
-    {
-      company: "GoAir",
-      code: "G8",
-      departTime: "06:45 AM",
-      arrivalTime: "09:00 AM",
-      Price: "₹ 4000",
-      from: "Delhi",
-      to: "Bengaluru",
-      duration: "2 h 15m",
-    },
-    {
-      company: "Vistara",
-      code: "UK",
-      departTime: "11:30 AM",
-      arrivalTime: "01:45 PM",
-      Price: "₹ 5500",
-      from: "Chennai",
-      to: "Delhi",
-      duration: "2 h 15m",
-    },
-    {
-      company: "AirAsia",
-      code: "AK",
-      departTime: "03:00 PM",
-      arrivalTime: "05:15 PM",
-      Price: "₹ 3000",
-      from: "Kolkata",
-      to: "Mumbai",
-      duration: "2 h 15m",
-    },
-    {
-      company: "Jet Airways",
-      code: "9W",
-      departTime: "07:30 AM",
-      arrivalTime: "09:45 AM",
-      Price: "₹ 6000",
-      from: "Bengaluru",
-      to: "Delhi",
-      duration: "2 h 15m",
-    },
-    {
-      company: "Air India",
-      code: "AI",
-      departTime: "12:15 PM",
-      arrivalTime: "02:30 PM",
-      Price: "₹ 5000",
-      from: "Delhi",
-      to: "Chennai",
-      duration: "2 h 15m",
-    },
-    {
-      company: "IndiGo",
-      code: "6E",
-      departTime: "04:45 PM",
-      arrivalTime: "07:00 PM",
-      Price: "₹ 4000",
-      from: "Mumbai",
-      to: "Delhi",
-      duration: "2 h 15m",
-    },
-    {
-      company: "SpiceJet",
-      code: "SG",
-      departTime: "09:30 AM",
-      arrivalTime: "11:45 AM",
-      Price: "₹ 3500",
-      from: "Delhi",
-      to: "Kolkata",
-      duration: "2 h 15m",
-    },
-    {
-      company: "GoAir",
-      code: "G8",
-      departTime: "01:00 PM",
-      arrivalTime: "03:15 PM",
-      Price: "₹ 4000",
-      from: "Chennai",
-      to: "Mumbai",
-      duration: "2 h 15m",
-    },
-    {
-      company: "Vistara",
-      code: "UK",
-      departTime: "05:30 PM",
-      arrivalTime: "07:45 PM",
-      Price: "₹ 5500",
-      from: "Delhi",
-      to: "Bengaluru",
-      duration: "2 h 15m",
-    },
-    {
-      company: "AirAsia",
-      code: "AK",
-      departTime: "10:15 AM",
-      arrivalTime: "12:30 PM",
-      Price: "₹ 3000",
-      from: "Mumbai",
-      to: "Chennai",
-      duration: "2 h 15m",
-    },
-    {
-      company: "Jet Airways",
-      code: "9W",
-      departTime: "02:45 PM",
-      arrivalTime: "05:00 PM",
-      Price: "₹ 6000",
-      from: "Kolkata",
-      to: "Delhi",
-      duration: "2 h 15m",
-    },
-    {
-      company: "Air India",
-      code: "AI",
-      departTime: "07:30 AM",
-      arrivalTime: "09:45 AM",
-      Price: "₹ 5000",
-      from: "Bengaluru",
-      to: "Mumbai",
-      duration: "2 h 15m",
-    },
-    {
-      company: "IndiGo",
-      code: "6E",
-      departTime: "12:00 PM",
-      arrivalTime: "02:15 PM",
-      Price: "₹ 4000",
-      from: "Delhi",
-      to: "Kolkata",
-      duration: "2 h 15m",
-    },
-    {
-      company: "SpiceJet",
-      code: "SG",
-      departTime: "04:30 PM",
-      arrivalTime: "06:45 PM",
-      Price: "₹ 3500",
-      from: "Mumbai",
-      to: "Chennai",
-      duration: "2 h 15m",
-    },
-  ];
+  // const flightsList = [
+  //   {
+  //     company: "Indigo",
+  //     code: "6E",
+  //     departTime: "10:00 AM",
+  //     arrivalTime: "12:00 PM",
+  //     Price: "₹ 5000",
+  //     from: "Delhi",
+  //     to: "Mumbai",
+  //     duration: "2 h 10m",
+  //   },
+  //   {
+  //     company: "Air India",
+  //     code: "AI",
+  //     departTime: "08:30 AM",
+  //     arrivalTime: "10:45 AM",
+  //     Price: "₹ 4500",
+  //     from: "Delhi",
+  //     to: "Kolkata",
+  //     duration: "2 h 15m",
+  //   },
+  //   {
+  //     company: "SpiceJet",
+  //     code: "SG",
+  //     departTime: "02:15 PM",
+  //     arrivalTime: "04:30 PM",
+  //     Price: "₹ 3500",
+  //     from: "Mumbai",
+  //     to: "Chennai",
+  //     duration: "2 h 15m",
+  //   },
+  //   {
+  //     company: "GoAir",
+  //     code: "G8",
+  //     departTime: "06:45 AM",
+  //     arrivalTime: "09:00 AM",
+  //     Price: "₹ 4000",
+  //     from: "Delhi",
+  //     to: "Bengaluru",
+  //     duration: "2 h 15m",
+  //   },
+  //   {
+  //     company: "Vistara",
+  //     code: "UK",
+  //     departTime: "11:30 AM",
+  //     arrivalTime: "01:45 PM",
+  //     Price: "₹ 5500",
+  //     from: "Chennai",
+  //     to: "Delhi",
+  //     duration: "2 h 15m",
+  //   },
+  //   {
+  //     company: "AirAsia",
+  //     code: "AK",
+  //     departTime: "03:00 PM",
+  //     arrivalTime: "05:15 PM",
+  //     Price: "₹ 3000",
+  //     from: "Kolkata",
+  //     to: "Mumbai",
+  //     duration: "2 h 15m",
+  //   },
+  //   {
+  //     company: "Jet Airways",
+  //     code: "9W",
+  //     departTime: "07:30 AM",
+  //     arrivalTime: "09:45 AM",
+  //     Price: "₹ 6000",
+  //     from: "Bengaluru",
+  //     to: "Delhi",
+  //     duration: "2 h 15m",
+  //   },
+  //   {
+  //     company: "Air India",
+  //     code: "AI",
+  //     departTime: "12:15 PM",
+  //     arrivalTime: "02:30 PM",
+  //     Price: "₹ 5000",
+  //     from: "Delhi",
+  //     to: "Chennai",
+  //     duration: "2 h 15m",
+  //   },
+  //   {
+  //     company: "IndiGo",
+  //     code: "6E",
+  //     departTime: "04:45 PM",
+  //     arrivalTime: "07:00 PM",
+  //     Price: "₹ 4000",
+  //     from: "Mumbai",
+  //     to: "Delhi",
+  //     duration: "2 h 15m",
+  //   },
+  //   {
+  //     company: "SpiceJet",
+  //     code: "SG",
+  //     departTime: "09:30 AM",
+  //     arrivalTime: "11:45 AM",
+  //     Price: "₹ 3500",
+  //     from: "Delhi",
+  //     to: "Kolkata",
+  //     duration: "2 h 15m",
+  //   },
+  //   {
+  //     company: "GoAir",
+  //     code: "G8",
+  //     departTime: "01:00 PM",
+  //     arrivalTime: "03:15 PM",
+  //     Price: "₹ 4000",
+  //     from: "Chennai",
+  //     to: "Mumbai",
+  //     duration: "2 h 15m",
+  //   },
+  //   {
+  //     company: "Vistara",
+  //     code: "UK",
+  //     departTime: "05:30 PM",
+  //     arrivalTime: "07:45 PM",
+  //     Price: "₹ 5500",
+  //     from: "Delhi",
+  //     to: "Bengaluru",
+  //     duration: "2 h 15m",
+  //   },
+  //   {
+  //     company: "AirAsia",
+  //     code: "AK",
+  //     departTime: "10:15 AM",
+  //     arrivalTime: "12:30 PM",
+  //     Price: "₹ 3000",
+  //     from: "Mumbai",
+  //     to: "Chennai",
+  //     duration: "2 h 15m",
+  //   },
+  //   {
+  //     company: "Jet Airways",
+  //     code: "9W",
+  //     departTime: "02:45 PM",
+  //     arrivalTime: "05:00 PM",
+  //     Price: "₹ 6000",
+  //     from: "Kolkata",
+  //     to: "Delhi",
+  //     duration: "2 h 15m",
+  //   },
+  //   {
+  //     company: "Air India",
+  //     code: "AI",
+  //     departTime: "07:30 AM",
+  //     arrivalTime: "09:45 AM",
+  //     Price: "₹ 5000",
+  //     from: "Bengaluru",
+  //     to: "Mumbai",
+  //     duration: "2 h 15m",
+  //   },
+  //   {
+  //     company: "IndiGo",
+  //     code: "6E",
+  //     departTime: "12:00 PM",
+  //     arrivalTime: "02:15 PM",
+  //     Price: "₹ 4000",
+  //     from: "Delhi",
+  //     to: "Kolkata",
+  //     duration: "2 h 15m",
+  //   },
+  //   {
+  //     company: "SpiceJet",
+  //     code: "SG",
+  //     departTime: "04:30 PM",
+  //     arrivalTime: "06:45 PM",
+  //     Price: "₹ 3500",
+  //     from: "Mumbai",
+  //     to: "Chennai",
+  //     duration: "2 h 15m",
+  //   },
+  // ];
 
   useEffect(() => {
     const fetchData = async () => {
-      const seatClassFormatted =
-        seatClass.charAt(0).toLowerCase() + seatClass.slice(1);
+      const seatClassFormatted = seatClass.charAt(0).toLowerCase() + seatClass.slice(1);
       const url = `http://localhost:8000/api/flights?TripType=${tripTypee}&Origin=${origin.code}&Destination=${destination.code}&DepartDate=${departDate}&SeatClass=${seatClassFormatted}`;
 
       try {
@@ -258,25 +261,26 @@ const Flight = () => {
           headers: {
             "Content-Type": "application/json",
           },
-        });
-        console.log(response)
+        }); 
+        // console.log(response)
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         const data = await response.json();
         console.log(data)
-        // setFilteredFlights(data.flights);
+        setAllFlights(data.flights);
+        setFilteredFlights(data.flights);
       } catch (error) {
         console.error("Failed to fetch flights:", error);
       }
-      setLoading(false);
+      // setLoading(false);
     };
 
     fetchData();
   }, [tripTypee, origin.code, destination.code, departDate, seatClass]);
 
-  const [filteredFlights, setFilteredFlights] = useState(flightsList);
+  const [filteredFlights, setFilteredFlights] = useState([]);
 
   return (
     <>
@@ -557,7 +561,7 @@ const Flight = () => {
                           <div key={index} className="each-flight-div-box show">
                             <div
                               className="each-flight-div"
-                              onClick={() => handleBook(flight)}
+                              // onClick={() => handleBook(flight)}
                             >
                               <div className="flight-company">
                                 <div className="flight-icon">
@@ -587,20 +591,20 @@ const Flight = () => {
                                 </div>
                                 <div className="company-details">
                                   <div className="company-name">
-                                    {flight.company}
+                                    {flight.airline}
                                   </div>
                                   <div className="plane-name">
-                                    {flight.code}
+                                    {flight.plane}
                                   </div>
                                 </div>
                               </div>
                               <div className="flight-time flight-time-div">
                                 <div className="flight-origin-time">
                                   <div className="flight-time">
-                                    <h5>{flight.departTime}</h5>
+                                    <h5>{flight.depart_time}</h5>
                                   </div>
                                   <div className="flight-place">
-                                    {flight.from}
+                                    {origin.code}
                                   </div>
                                 </div>
                                 <div className="flight-stops tooltip">
@@ -621,10 +625,10 @@ const Flight = () => {
                                 </div>
                                 <div className="flight-destination-time">
                                   <div className="flight-time">
-                                    <h5>{flight.arrivalTime}</h5>
+                                    <h5>{flight.arrival_time}</h5>
                                   </div>
                                   <div className="flight-place">
-                                    {flight.to}
+                                    {destination.code}
                                   </div>
                                 </div>
                               </div>
@@ -637,7 +641,7 @@ const Flight = () => {
                                     <button
                                       className="btn btn-primary btn-danger o-b"
                                       type="button"
-                                      // onClick={() => handleBook(flight)}
+                                      onClick={() => handleBook(flight)}
                                     >
                                       <nobr>Book Flight</nobr>
                                     </button>

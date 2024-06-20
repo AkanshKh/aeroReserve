@@ -133,7 +133,7 @@ const Home = () => {
   const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(origin, destination, departDate, returnDate, seatClass, tripType);
+    // console.log(origin, destination, departDate, returnDate, seatClass, tripType);
     const tripTypee = (tripType === 'one-way' ? 1 : 2);
     // console.log(origin)
     // console.log(destination)

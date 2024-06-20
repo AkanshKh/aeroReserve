@@ -4,7 +4,8 @@ import NavBar from './navBar';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { MdDelete } from "react-icons/md";
 import { BsLuggage } from "react-icons/bs";
-
+import { useContext } from 'react';
+import { AuthContext } from '../context/authContext';
 
 const countryCodes = [
   { code: 'IN', value: '91', name: 'India (+91)' },
@@ -17,9 +18,52 @@ const countryCodes = [
 const BookFlight = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const flight1 = location.state.flightData;
+  const flightId = location.state.flightId;
   const departDate = location.state.departDate;
   const seat = location.state.seatClass;
+  const origin = location.state.origin;
+  const destination = location.state.destination;
+
+  const [flight1, setFlight1] = useState({});
+  const [fee, setFee] = useState(0);
+  const [fare, setFare] = useState(0);
+
+  const { user, loading } = useContext(AuthContext);
+
+  useEffect(() => {
+    // Fetch flight details using flightId
+    const fetchFlightDetails = async () => {
+      const seatClassFormatted = seat.charAt(0).toLowerCase() + seat.slice(1);
+      const url = `http://localhost:8000/api/review?flight1Id=${flightId}&flight1Date=${departDate}&seatClass=${seatClassFormatted}`;
+      try {
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Token ${user.token}`
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setFlight1(data.flight1);
+          setFee(data.fee);
+          setFare(data.total_fare);
+        }
+      } catch (error) {
+        console.error('Error fetching flight details', error);
+      }
+    };
+    if (user) {
+      console.log(user)
+      fetchFlightDetails();
+    }
+    console.log(flight1);
+  }, [flightId, user, loading]);
+
+  useEffect(() => {
+    console.log(flight1);
+  }, [flight1]);
+
   const [mobile, setMobile] = useState('');
   const [email, setEmail] = useState('');
   const [passengers, setPassengers] = useState([]);
@@ -40,7 +84,6 @@ const BookFlight = () => {
     setNewPassenger({ fname: '', lname: '', gender: '' });
   };
 
-  const fee = 100;
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -81,32 +124,32 @@ const BookFlight = () => {
                   <hr />
                   <div className="media-airline">
                     <div>
-                      <div className="brand">{flight1.company}</div>
+                      <div className="brand">{flight1.airline}</div>
                       <div>&nbsp;&middot;&nbsp;</div>
-                      <div className="plane-name">{flight1.code}</div>
+                      <div className="plane-name">{flight1.plane}</div>
                       <div>&nbsp;&middot;&nbsp;</div>
                       <div className="plane-name">{seat}</div>
                     </div>
                   </div>
                   <div className="row ticket-details-div">
                     <div className="col-3 airline-name">
-                      <div className="brand">{flight1.company}</div>
-                      <div className="plane-name">{flight1.code}</div>
+                      <div className="brand">{flight1.airline}</div>
+                      <div className="plane-name">{flight1.plane}</div>
                     </div>
                     <div className="col-3 depart-time">
-                      <div className="time">{flight1.departTime}</div>
+                      <div className="time">{flight1.depart_time}</div>
                       <div className="date ddate">{departDate}</div>
-                      <div className="place">{flight1.from}</div>
-                      <div className="airport">{flight1.from}</div>
+                      <div className="place">{origin.code}</div>
+                      <div className="airport">{origin.airport}</div>
                     </div>
                     <div className="col-3 time-details">
                       <div className="duration">{flight1.duration}</div>
                     </div>
                     <div className="col-3 arrival-time">
-                      <div className="time">{flight1.arrivalTime}</div>
+                      <div className="time">{flight1.arrival_time}</div>
                       <div className="date adate">{departDate}</div>
-                      <div className="place">{flight1.to}</div>
-                      <div className="airport">{flight1.to}</div>
+                      <div className="place">{destination.code}</div>
+                      <div className="airport">{destination.airport}</div>
                     </div>
                   </div>
                   <hr />
