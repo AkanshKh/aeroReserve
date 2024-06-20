@@ -441,6 +441,8 @@ def payment(request):
             response_data = {
                 'ticket1': ticket.id,
                 'ticket1ref':ticket.ref_no,
+                'origin': ticket.flight.origin.code,
+                'destination': ticket.flight.destination.code,
                 'ticket2': None
             }
 
