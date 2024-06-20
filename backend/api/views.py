@@ -279,8 +279,12 @@ def review(request):
             'arrival_datetime': flight1_arrival_datetime,
             'origin': flight1.origin.code,
             'destination': flight1.destination.code,
+            'plane':flight1.plane,
+            'airline':flight1.airline,
             'seat_class': seat_class,
             'base_fare': base_fare,
+            'duration_hr': flight1.duration.seconds//3600,
+            'duration_min': (flight1.duration.seconds%3600)//60,
         },
         'fee': FEE,
         'total_fare': total_fare
