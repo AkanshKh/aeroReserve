@@ -97,7 +97,7 @@ const Home = () => {
 
     if(value.length >= 2){
       const url = `http://localhost:8000/api/query/${value}/`;
-
+      // console.log(url);
       try{
         const response = await fetch(url, {
           method: "GET",

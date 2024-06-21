@@ -13,6 +13,9 @@ export const AuthProvider = ({children}) => {
       setUser({username, token});
       setLoading(false);
     }
+    else{
+      setLoading(false);
+    }
   }, []);
 
   const login = (userData) => {

@@ -63,11 +63,17 @@ const PaymentForm = () => {
       
       if (response.ok) {
         const responseData = await response.json();
+        setTimeout(() => {
+          setPaymentLoader(false);
+        }, 3000); 
         setPaymentLoader(false);
         console.log('Payment successful:', responseData);
         navigate('/exit', { state: responseData });
       } else {
         setPaymentLoader(false);
+        setTimeout(() => {
+          setPaymentLoader(false);
+        }, 3000); 
         const errorData = await response.json();
         console.error('Error booking flight:', errorData);
         setPaymentError(true);

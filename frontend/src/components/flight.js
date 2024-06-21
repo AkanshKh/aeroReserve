@@ -37,10 +37,10 @@ const Flight = () => {
   const handleFilter = (type, start, end) => {
     const filtered = allFlights.filter((flight) => {
       let flightTime = parseInt(
-        flight[type === "arrival" ? "arrivalTime" : "departTime"].split(":")[0]
+        flight[type === "arrival" ? "arrival_time" : "depart_time"].split(":")[0]
       );
       const flightHour =
-        flight[type === "arrival" ? "arrivalTime" : "departTime"].slice(-2);
+        flight[type === "arrival" ? "arrival_time" : "depart_time"].slice(-2);
       if (flightHour === "PM" && flightTime !== 12) {
         flightTime += 12;
       }
@@ -383,7 +383,7 @@ const Flight = () => {
           <div className="query-result-div">
             <div className="container">
               <div className="row">
-                {filteredFlights.length > 0 ? (
+                {allFlights.length > 0 ? (
                   <>
                     <div className="col-lg-3 filter-div">
                       <div className="filter">
@@ -621,7 +621,7 @@ const Flight = () => {
                                     />
                                   </svg>
                                   <span className="tooltiptext">
-                                    {flight.duration}
+                                  {Math.floor(flight.duration / 3600)}h {Math.floor((flight.duration % 3600) / 60)}m
                                   </span>
                                 </div>
                                 <div className="flight-destination-time">

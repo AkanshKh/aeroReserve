@@ -47,7 +47,21 @@
     display: flex;
     margin-top: 110px;
 }
+.btn-print{
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    width: fit-content;
+    padding: 10px;
+    border: 1px solid green;
+    border-radius: 10px;
+}
 
+.btn-print:hover{
+    background-color: green;
+    color: white;
+
+}
 .section2 .svg-div-c svg{
     animation-name: enlarge;
     animation-duration: .5s;

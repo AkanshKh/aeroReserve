@@ -1,13 +1,48 @@
-import React from "react";
+import React, { useContext } from "react";
 import NavBar from "./navbar";
 import "../css/payment.css"
 import { useLocation } from "react-router-dom";
+import { AuthContext } from "../context/authContext";
 const Exit = () => {
   const location = useLocation();
   const ticket = location.state.ticket1;
   const ticket1ref = location.state.ticket1ref;
   const origin = location.state.origin;
   const destination = location.state.destination;
+
+  const {user} = useContext(AuthContext);
+
+  const handlePrint =async (e) => {
+    e.preventDefault();
+    const url = `http://localhost:8000/api/ticket/print/${ticket1ref}`;
+    // console.log(url);
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/pdf",
+          "Authorization": `Token ${user.token}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      // Open the PDF in a new window or an iframe to print
+      const printWindow = window.open(blobUrl);
+      printWindow.addEventListener('load', () => {
+          printWindow.print();
+      });
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
+
+
     return (
       <>
       <NavBar/>
@@ -27,7 +62,7 @@ const Exit = () => {
             <div>
               <form action="/getticket" method="get" target="_blank">
                 {/* <input type="hidden" name="ref" value={ticket1.ref_no} /> */}
-                {/* <button type="submit" className="btn btn-outline-primary">Print Ticket ({ticket1.flight.origin.code} to {ticket1.flight.destination.code})</button> */}
+                <button type="button" className="btn-print" onClick={handlePrint}>Print Ticket ({origin} to {destination})</button>
               </form>
             </div>
           </div>

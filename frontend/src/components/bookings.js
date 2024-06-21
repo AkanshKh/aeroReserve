@@ -1,20 +1,68 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Navbar from './navbar';
 import '../css/bookings.css'; // Ensure the path to your CSS file is correct
+import { AuthContext } from '../context/authContext';
 
 const Bookings = () => {
+  const {user} = useContext(AuthContext)
   const [tickets, setTickets] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [cancelRef, setCancelRef] = useState(null);
   useEffect(() => {
-    // Fetch tickets from the server or mock the data here
-    // Example:
-    // console.log("fetching data")
-    // setTickets(mockedData);
+    const fetchTickets = async () => {
+      const url = 'http://localhost:8000/api/flight/bookings/';
+
+      try {
+        const response = await fetch(url,{
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Token ${user.token}`,
+          },
+        });
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        setTickets(data);
+        console.log(data);
+      }
+      catch (error) {
+        console.log(error);
+      }
+    }
+
+    fetchTickets();
   }, []);
 
-  const handlePrint = (ref) => {
-    window.open(`/getticket?ref=${ref}`, '_blank');
+  const handlePrint = async (ref) => {
+    const url = `http://localhost:8000/api/ticket/print/${ref}`;
+    // console.log(url);
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/pdf",
+          "Authorization": `Token ${user.token}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      // Open the PDF in a new window or an iframe to print
+      const printWindow = window.open(blobUrl);
+      printWindow.addEventListener('load', () => {
+          printWindow.print();
+      });
+    }
+    catch (error) {
+      console.log(error);
+    }
   };
 
   const handleResumeBooking = (ref) => {
@@ -25,11 +73,34 @@ const Bookings = () => {
     setCancelRef(ref);
     setShowPopup(true);
   };
+  useEffect(() => {
+  }, [showPopup, cancelRef]);
 
-  const confirmCancel = () => {
-    // Handle the ticket cancellation logic here
+  const confirmCancel = async () => {
     console.log(`Ticket with ref ${cancelRef} cancelled.`);
+    const url = `http://localhost:8000/api/cancel/`;
+    const data = {
+      "ref" : cancelRef
+    }
     setShowPopup(false);
+    try{
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Token ${user.token}`,
+        },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const resData = await response.json();
+      alert("Ticket Cancelled Successfully")
+    }
+    catch (error) {
+      console.log(error);
+    }
   };
 
   const closePopup = () => {
@@ -41,7 +112,7 @@ const Bookings = () => {
       <Navbar/>
     <div className="container">
       <section className="section section1">
-        <div className="container">
+        <div className="container cont">
           {tickets.length > 0 ? (
             tickets.map(ticket => (
               <div className="row each-booking-div" key={ticket.ref_no} id={ticket.ref_no}>
@@ -131,16 +202,19 @@ const Bookings = () => {
         </div>
       </section>
       {showPopup && (
-        <div className="popup">
-          <div className="small-popup">
-            <div style={{ marginBottom: '10px', fontSize: '1.1em' }}><strong>Do you really want to cancel this ticket?</strong></div>
-            <div className="popup-actions">
-              <button className="btn btn-light" onClick={closePopup}>Go Back</button>
-              <button className="btn btn-danger" onClick={confirmCancel}>Cancel</button>
+        <div className="custom-overlay">
+          <div className="custom-popup">
+            <div className="custom-popup-content">
+              <div style={{ marginBottom: '10px', fontSize: '1.1em' }}><strong>Do you really want to cancel this ticket?</strong></div>
+              <div className="custom-popup-actions">
+                <button className="btn-back" onClick={closePopup}>Go Back</button>
+                <button className="btn-cancel" onClick={confirmCancel}>Cancel</button>
+              </div>
             </div>
           </div>
         </div>
       )}
+
     </div>
   </>
   );

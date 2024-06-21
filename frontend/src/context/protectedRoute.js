@@ -5,7 +5,7 @@ import { AuthContext } from './authContext'
 
 const PrivateRoute = ({ children }) => {
     const { user, loading } = useContext(AuthContext);
-    // console.log(user, loading);
+    console.log(user, loading);
     const location = useLocation();
     useEffect(() => {
         // console.log('User:', user);
