@@ -111,3 +111,16 @@ class BookingSerializer(serializers.Serializer):
     passengersCount = serializers.IntegerField(min_value=1)
     passengers = PassengerSerializer(many=True)
     coupon = serializers.CharField(max_length=20, required=False)
+
+class FlightSerializerv2(serializers.ModelSerializer):
+    origin = PlaceSerializer()
+    destination = PlaceSerializer()
+    class Meta:
+        model = Flight
+        fields = '__all__'
+
+class TicketSerializerv2(serializers.ModelSerializer):
+    flight = FlightSerializerv2()
+    class Meta:
+        model = Ticket
+        fields = '__all__'
