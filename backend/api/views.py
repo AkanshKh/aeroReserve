@@ -511,7 +511,7 @@ def get_ticket(request,ref):
 @csrf_exempt
 def bookings(request):
     tickets = Ticket.objects.filter(user=request.user,status="CONFIRMED").order_by('-booking_date')
-    serializer = TicketSerializer(tickets, many=True)
+    serializer = TicketSerializerv2(tickets, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 from rest_framework.decorators import api_view, permission_classes
