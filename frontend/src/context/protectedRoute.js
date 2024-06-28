@@ -1,11 +1,11 @@
 // PrivateRoute.js
 import React, { useContext, useEffect } from 'react';
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { AuthContext } from './authContext'
 
 const PrivateRoute = ({ children }) => {
     const { user, loading } = useContext(AuthContext);
-    console.log(user, loading);
+    // console.log(user, loading);
     const location = useLocation();
     useEffect(() => {
         // console.log('User:', user);

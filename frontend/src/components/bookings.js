@@ -26,7 +26,7 @@ const Bookings = () => {
 
         const data = await response.json();
         setTickets(data);
-        console.log(data);
+        // console.log(data);
       }
       catch (error) {
         console.log(error);
@@ -34,7 +34,7 @@ const Bookings = () => {
     }
 
     fetchTickets();
-  }, []);
+  }, [user.token]);
 
   const handlePrint = async (ref) => {
     const url = `http://localhost:8000/api/ticket/print/${ref}`;
@@ -77,7 +77,7 @@ const Bookings = () => {
   }, [showPopup, cancelRef]);
 
   const confirmCancel = async () => {
-    console.log(`Ticket with ref ${cancelRef} cancelled.`);
+    // console.log(`Ticket with ref ${cancelRef} cancelled.`);
     const url = `http://localhost:8000/api/cancel/`;
     const data = {
       "ref" : cancelRef
@@ -95,7 +95,7 @@ const Bookings = () => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      const resData = await response.json();
+      // const resData = await response.json();
       alert("Ticket Cancelled Successfully")
     }
     catch (error) {

@@ -7,10 +7,10 @@ import { useContext } from 'react';
 
 const PaymentForm = () => {
 
-    const { user, loading } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
     const location = useLocation();
     
-    const details = location.state.details;
+    // const details = location.state.details;
     const ticket1ref = location.state.ticket1ref;
     const fare = location.state.fare;
 
@@ -49,7 +49,7 @@ const PaymentForm = () => {
       expYear,
       cvv, 
     };
-    console.log(data);
+    // console.log(data);
     
     try {
       const response = await fetch(url, {
@@ -67,7 +67,7 @@ const PaymentForm = () => {
           setPaymentLoader(false);
         }, 3000); 
         setPaymentLoader(false);
-        console.log('Payment successful:', responseData);
+        // console.log('Payment successful:', responseData);
         navigate('/exit', { state: responseData });
       } else {
         setPaymentLoader(false);

@@ -60,7 +60,7 @@ const BookFlight = () => {
       fetchFlightDetails();
     }
     // console.log(flight1);
-  }, [flightId, user, loading]);
+  }, [flightId, user, loading, departDate, seat]);
 
   useEffect(() => {
     // console.log(flight1);
@@ -111,7 +111,7 @@ const BookFlight = () => {
       "passengersCount" : passengers.length,
       "passengers" : passengers
     }
-    console.log(data);
+    // console.log(data);
 
     try{
       const response = await fetch(url, {
@@ -125,7 +125,7 @@ const BookFlight = () => {
       if(response.ok){
         const responseData = await response.json();
         setPaymentLoader(false);
-        console.log(responseData);
+        // console.log(responseData);
         navigate('/payment', { state: responseData });
       }
       else{

@@ -18,52 +18,60 @@ const Home = () => {
   const [originSuggestions, setOriginSuggestions] = useState([]);
   const [destinationSuggestions, setDestinationSuggestions] = useState([]);
 
-  const airports = [
-    {
-      name : "Bangkok",
-      code : "BKK"
-    },
-    {
-      name : "New York",
-      code : "JFK"
-    },
-    {
-      name : "Los Angeles",
-      code : "LAX"
-    },
-    {
-      name : "Delhi",
-      code : "DEL"
-    },
-    {
-      name : "Mumbai",
-      code : "BOM"
-    },
-    {
-      name : "London",
-      code : "LHR"
-    },
-    {
-      name : "Paris",
-      code : "CDG"
-    },
-    {
-      name : "Dubai",
-      code : "DXB"
-    },
-    {
-      name : "Singapore",
-      code : "SIN"
-    },
-    {
-      name : "Hong Kong",
-      code : "HKG"
-    }
-  ]
+  // const airports = [
+  //   {
+  //     name : "Bangkok",
+  //     code : "BKK"
+  //   },
+  //   {
+  //     name : "New York",
+  //     code : "JFK"
+  //   },
+  //   {
+  //     name : "Los Angeles",
+  //     code : "LAX"
+  //   },
+  //   {
+  //     name : "Delhi",
+  //     code : "DEL"
+  //   },
+  //   {
+  //     name : "Mumbai",
+  //     code : "BOM"
+  //   },
+  //   {
+  //     name : "London",
+  //     code : "LHR"
+  //   },
+  //   {
+  //     name : "Paris",
+  //     code : "CDG"
+  //   },
+  //   {
+  //     name : "Dubai",
+  //     code : "DXB"
+  //   },
+  //   {
+  //     name : "Singapore",
+  //     code : "SIN"
+  //   },
+  //   {
+  //     name : "Hong Kong",
+  //     code : "HKG"
+  //   }
+  // ]
 
   const handleTripTypeChange = (e) => {
-    setTripType(e.target.value === 1 ? "one-way" : "round-trip");
+    if(e.target.value === "1"){
+      setTripType("one-way");
+    }
+    else{
+      setTripType("round-trip");
+    }
   };
+
+  useEffect(() => {
+  }, [tripType]);
 
   const handleOriginChange = async (e) => {
     const value = e.target.value;

@@ -7,7 +7,7 @@ import '../App.css';
 
 
 const SignUp = () => {
-    const usernameRegex = /^[a-zA-Z0-9_\.]{3,16}$/;
+    const usernameRegex = /^[a-zA-Z0-9_]{3,16}$/;
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,20}$/;
     const [formData, setFormData] = useState({
         first_name: '',
@@ -41,7 +41,7 @@ const SignUp = () => {
     };
 
     const validateMatch = (pass , conf) => {
-        if(pass != conf){
+        if(pass !== conf){
             return 'Passwords do not match';
         }
     }
@@ -54,7 +54,7 @@ const SignUp = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const url = 'http://localhost:8000/api/register/';
-        console.log(formData);
+        // console.log(formData);
         try{
             const response = await fetch(url,{
                 method: 'POST',

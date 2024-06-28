@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 const Exit = () => {
   const location = useLocation();
-  const ticket = location.state.ticket1;
+  // const ticket = location.state.ticket1;
   const ticket1ref = location.state.ticket1ref;
   const origin = location.state.origin;
   const destination = location.state.destination;

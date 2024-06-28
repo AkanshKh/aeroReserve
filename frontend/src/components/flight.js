@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import NavBar from "./navbar";
 import Footer from "./footer";
 import "../css/flight.css";
@@ -62,7 +62,7 @@ const Flight = () => {
 
   const handleBook = (flightData) => {
     // console.log(flightData);
-    console.log("clicked");
+    // console.log("clicked");
     navigate("/book", {
       state: {
         flightId : flightData.id,
@@ -269,7 +269,7 @@ const Flight = () => {
         }
 
         const data = await response.json();
-        console.log(data)
+        // console.log(data)
         setAllFlights(data.flights);
         setFilteredFlights(data.flights);
       } catch (error) {
