@@ -35,10 +35,10 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-What things you need to install the software and how to install them.
+Open your terminal or command prompt in the working directory and run 
 
 ```
-Give examples
+pip install -r requirements.txt
 ```
 
 ### Installing
@@ -119,6 +119,7 @@ Here is a thorough walkthrough.
 - [React](https://react.dev/) - Web Frontend Framework
 - [Django](https://www.djangoproject.com/) - Server Framework
 - [Python](https://vuejs.org/) - Backend Server Environment
+- [Sqlite3](https://www.sqlite.org/) - Database
 
 ## ✍️ Authors <a name = "authors"></a>
 
