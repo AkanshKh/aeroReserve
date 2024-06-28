@@ -47,7 +47,7 @@ Firstly clone the repository to your local machine by running the following comm
 
 
 ```
-git clone https://github.com/AkanshKh/aeroReserve
+git clone https://github.com/AkanshKh/aeroReserve.git
 ```
 
 
