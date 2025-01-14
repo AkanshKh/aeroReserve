@@ -124,4 +124,6 @@ Here is a thorough walkthrough.
 ## ✍️ Authors <a name = "authors"></a>
 
 - [Akansh Khandelwal](https://github.com/AkanshKh)
-- [Anubhab Dutta](https://github.com/anub-dota) 
+- [Anubhab Dutta](https://github.com/anub-dota)
+- [Abhishek Bindra](https://github.com/Abhishekbindra26)
+
